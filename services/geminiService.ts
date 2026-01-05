@@ -39,14 +39,14 @@ export const extractReceiptData = async (base64Image: string): Promise<GeminiExt
       }
     });
 
-    // Verificação de segurança para o TypeScript
-    const text = response.text;
-    if (typeof text !== 'string') {
+    // Verificação segura para o compilador do Netlify
+    const generatedText = response.text;
+    if (!generatedText) {
       console.warn("Gemini retornou uma resposta sem texto.");
       return null;
     }
 
-    const result = JSON.parse(text.trim());
+    const result = JSON.parse(generatedText.trim());
     return result as GeminiExtraction;
   } catch (error) {
     console.error("Erro ao analisar recibo com Gemini:", error);
