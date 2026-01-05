@@ -3,14 +3,11 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ExpenseCategory, GeminiExtraction } from "../types";
 
 export const extractReceiptData = async (base64Image: string): Promise<GeminiExtraction | null> => {
-  // Fix: Directly check and use process.env.API_KEY per guidelines
   if (!process.env.API_KEY) return null;
 
   try {
-    // Fix: Always use new GoogleGenAI({ apiKey: process.env.API_KEY }) directly to ensure the latest key is used
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
-    // We remove the data:image/jpeg;base64, part if present
     const imageData = base64Image.split(',')[1] || base64Image;
 
     const response = await ai.models.generateContent({
@@ -42,7 +39,14 @@ export const extractReceiptData = async (base64Image: string): Promise<GeminiExt
       }
     });
 
-    const result = JSON.parse(response.text.trim());
+    // Verificação de segurança para o TypeScript
+    const text = response.text;
+    if (typeof text !== 'string') {
+      console.warn("Gemini retornou uma resposta sem texto.");
+      return null;
+    }
+
+    const result = JSON.parse(text.trim());
     return result as GeminiExtraction;
   } catch (error) {
     console.error("Erro ao analisar recibo com Gemini:", error);
