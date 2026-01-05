@@ -39,10 +39,11 @@ export const extractReceiptData = async (base64Image: string): Promise<GeminiExt
       }
     });
 
-    // Verificação segura para o compilador do Netlify
+    // Verificação robusta para satisfazer o compilador do Netlify (TS18048)
     const generatedText = response.text;
-    if (!generatedText) {
-      console.warn("Gemini retornou uma resposta sem texto.");
+    
+    if (typeof generatedText !== 'string') {
+      console.warn("Gemini retornou uma resposta sem conteúdo textual.");
       return null;
     }
 
