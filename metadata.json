@@ -1,0 +1,7 @@
+{
+  "name": "Gestão de Reembolsos",
+  "description": "Um aplicativo intuitivo para técnicos de campo registrarem despesas, fotos de recibos e controlarem adiantamentos mensais com compartilhamento via nuvem.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
